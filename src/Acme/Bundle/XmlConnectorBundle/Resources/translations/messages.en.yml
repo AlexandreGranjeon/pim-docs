@@ -12,4 +12,8 @@ acme_xml_connector:
 
 batch_jobs:
     xml_product_import:
-        import.label: Product Import XML
+        label: Product Import XML
+
+pim_import_export:
+    download_archive:
+      invalid_xml: Download invalid items in XML

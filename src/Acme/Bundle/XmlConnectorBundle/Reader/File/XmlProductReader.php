@@ -42,14 +42,19 @@ class XmlProductReader implements
             // for example purpose, we should use XML Parser to read line per line
             $this->xml = simplexml_load_file($filePath, 'SimpleXMLIterator');
             $this->xml->rewind();
+            $this->stepExecution->addSummaryInfo('read_lines', -1);
         }
 
-        if($data = $this->xml->current()) {
+        if ($data = $this->xml->current()) {
             $item = [];
             foreach ($data->attributes() as $attributeName => $attributeValue) {
                 $item[$attributeName] = (string) $attributeValue;
             }
             $this->xml->next();
+
+            if (null !== $this->stepExecution) {
+                $this->stepExecution->incrementSummaryInfo('read_lines');
+            }
 
             try {
                 $item = $this->converter->convert($item);
