@@ -57,7 +57,6 @@ class XmlWriter extends AbstractFileWriter implements
         }
 
         foreach ($items as $item) {
-
             $this->xml->startElement('product');
             foreach ($item as $property => $value) {
                 $this->xml->writeAttribute($property, $value);

@@ -4,7 +4,7 @@ How to Import Products from a XML File
 Prerequisite
 ------------
 
-The foundations of a connector creation has been covered in the previous chapter (cf :doc:`/cookbook/import_export/create-connector`). With the following hands-on practice, we will create our own specific connector.
+The basics of a connector creation have been covered in the previous chapter (cf. :doc:`/cookbook/import_export/create-connector`). With the following hands-on practice, we will create our own specific connector.
 
 We assume that we're using a standard edition with the ``icecat_demo_dev`` data set, `sku` and `name` already exist as attributes in the PIM and the `family` is also an existing property.
 
@@ -22,7 +22,7 @@ For a recap, here is the process of a product import job execution:
 
 2. Process the product and check the product values
 
-    - If no errors has been throw in the previous step, the read and converted product is then processed by a product processor.
+    - If no errors has been thrown in the previous step, the read and converted product is then processed by a product processor.
     - If an error is thrown while processing, the product is marked as invalid.
 
 .. note::
@@ -35,7 +35,7 @@ For a recap, here is the process of a product import job execution:
 
 4. Collect the invalid products found and export them in a separate file
 
-    - When all products have been read, processed and written into the database, the job collects all the errors found in the file at each steps and writes them back into a separate file of invalid items.
+    - When all products have been read, processed and written into the database, the job collects all the errors found in the file at each step and writes them back into a separate file of invalid items.
 
 
 In this cookbook, our use case is to import new products from the following XML file ``products.xml``:
@@ -112,7 +112,7 @@ For further information you can check the following cookbook: :doc:`/cookbook/im
 
 .. important::
 
-    We strongly advise to always try to re-use most of the existing pieces, especially processor and writer, it ensures that all business rules and validation will be properly applied.
+    We strongly advise to always try to re-use most of the existing pieces, especially processor and writer, it makes sure that all business rules and validation will be properly applied.
 
 Create the Reader
 -----------------
@@ -159,11 +159,11 @@ Create a file ``Resources/translations/messages.en.yml`` in the Bundle to transl
 Use the new Connector
 ---------------------
 
-Now if you refresh the cache, the new connector and xml job can be found under Export > Import profiles > Create import profile.
+Now if you refresh the cache, the new connector and xml job can be found under Collect > Import profiles > Create import profile.
 
 You can create an instance of this job and give it a name like ``xml_product_import``.
 
-Now you can run the job from the UI or you can use following command:
+Now you can run the job from the UI or use following command:
 
 .. code-block:: bash
 
@@ -172,15 +172,15 @@ Now you can run the job from the UI or you can use following command:
 Adding support for invalid items export
 ---------------------------------------
 
-When the PIM reads the file and processes the entities we want to import, it performs several checks to ensure the values we import are valid and they respect the constraints we configured the PIM with.
+When the PIM reads the file and processes the entities we want to import, it performs several checks to make sure that the values we import are valid and they respect the constraints we configured the PIM with.
 
 The PIM is then capable of exporting back the invalid items that do not respect those constraints after an import operation.
 
 In order for our connector to support this feature, we will need to implement a few more parts in our connector:
 
 - ``XmlInvalidItemWriter``: a registered XML invalid writer service whose work is to export the invalid lines found during the reading and processing steps.
-- ``XmlFileIterator``: which is utilized by the ``XmlInvalidItemWriter``. It's used to read the imported file to find the invalid items.
-- ``XmlWriter``: It's responsibility is to write the invalid items back in a separate file available for download to the user.
+- ``XmlFileIterator``: which is used by the ``XmlInvalidItemWriter`` to read the imported file to find the invalid items.
+- ``XmlWriter``: Its responsibility is to write the invalid items back in a separate file available for download to the user.
 
 
 Create an XML file iterator class
@@ -194,7 +194,7 @@ We now need to implement the functions of the interface. Here is a working examp
     :language: php
     :linenos:
 
-Now, let's declare a simple symfony service for this class. Here is the ``Resources/config/readers.yml``:
+Now, let's declare a simple Symfony service for this class. Here is the ``Resources/config/readers.yml``:
 
 .. literalinclude:: ../../src/Acme/Bundle/XmlConnectorBundle/Resources/config/readers.yml
     :language: yaml
@@ -205,13 +205,13 @@ Create an XML writer class
 
 The XML writer will be responsible for writing the invalid items in a specified file path.
 
-A implementation of it could be like so:
+An implementation of it could be:
 
 .. literalinclude:: ../../src/Acme/Bundle/XmlConnectorBundle/Writer/XmlWriter.php
     :language: php
     :linenos:
 
-Let's declare a symfony service for our XML writer in ``Resources/config/writers.yml``:
+Let's declare a Symfony service for our XML writer in ``Resources/config/writers.yml``:
 
 .. literalinclude:: ../../src/Acme/Bundle/XmlConnectorBundle/Resources/config/writers.yml
     :language: yaml
@@ -219,9 +219,9 @@ Let's declare a symfony service for our XML writer in ``Resources/config/writers
 
 .. note::
 
-        Please note that every new configuration file created in the ``Resources`` folder should be loaded in the symfony dependency injection for it to be taken into account.
+        Please note that every new configuration file created in the ``Resources/config`` folder should be loaded in the Symfony dependency injection for it to be taken into account.
 
-Plugin it altogether
+Plug it altogether
 --------------------
 
 Now that our XmlFileIterator class and service are defined, let's use them in our custom implementation of the ``XmlInvalidWriterInterface``.
@@ -229,7 +229,7 @@ Now that our XmlFileIterator class and service are defined, let's use them in ou
 Let's use the existing ``AbstractInvalidItem`` to implement our custom class. We only need to implement two functions from our abstract superclass.
 
 - ``getInputFileIterator(JobParameters $jobParameters)``: that returns a configured instance of our custom reader the ``XmlFileIterator`` class.
-- ``setupWriter(JobExecution $jobExecution)``: that setups our custom writer, an instance of the ``XmlWriter`` class.
+- ``setupWriter(JobExecution $jobExecution)``: sets up our custom writer, an instance of the ``XmlWriter`` class.
 
 Here is a working example:
 
@@ -237,7 +237,7 @@ Here is a working example:
     :language: php
     :linenos:
 
-Let's define a tagged symfony service in ``Resources/config/archiving.yml``, so that our custom invalid item writer is taken into account and used by the PIM.
+Let's define a tagged Symfony service in ``Resources/config/archiving.yml``, so that our custom invalid item writer is taken into account and used by the PIM.
 
 .. literalinclude:: ../../src/Acme/Bundle/XmlConnectorBundle/Resources/config/archiving.yml
     :language: yaml
@@ -246,8 +246,8 @@ Let's define a tagged symfony service in ``Resources/config/archiving.yml``, so 
 Try it out
 ----------
 
-Every parts of our connector are now in place for it to be able to export invalid items.
+All parts of our connector are now in place for it to be able to export invalid items.
 
-To try it out, run the xml import with the example file ``products.xml`` in the UI. At the end of the job execution a new button should appear with label "Download invalid items in XML".
+To try it out, run the XML import with the example file ``products.xml`` in the UI. At the end of the job execution a new button should appear with the label "Download invalid items in XML".
 
 Click it and download the XML file containing the invalid items found by the import job.
