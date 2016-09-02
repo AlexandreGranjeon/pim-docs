@@ -1,7 +1,7 @@
 System configuration
 --------------------
 
-You now have a system with the right versions of Apache, php and mysql. The next step is to configure it to be able to run an Akeneo PIM instance.
+You now have a system with the right versions of Apache, PHP and MySQL. The next step is to configure it to be able to run an Akeneo PIM instance.
 
 MySQL
 *****
@@ -15,7 +15,7 @@ MySQL
     mysql> GRANT ALL PRIVILEGES ON akeneo_pim.* TO akeneo_pim@localhost IDENTIFIED BY 'akeneo_pim';
     mysql> EXIT
 
-php
+PHP
 ***
 
 .. include:: /reference/technical_information/php_ini.rst.inc
@@ -23,15 +23,15 @@ php
 Apache
 ******
 
-Setting-up the permissions
+Setting up the permissions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To avoid spending too much time on permission problems between the CLI user and the Apache user, an easy configuration
-is to use the same user for both processes.
+is to use the same user for of them.
 
 .. warning::
 
-    This configuration is aimed to easily setup a development machine.
+    This configuration is aimed to easily set up a development machine.
     **It is absolutely not suited for a production environment.**
 
 * Get your identifiers
@@ -49,7 +49,7 @@ In this example, the user is *my_user* and the group is *my_group*.
 
     $ sudo service apache2 stop
 
-* Open this file ``/etc/apache2/envvars`` with your favorite text editor then update Apache run user and run group.
+* Open this file ``/etc/apache2/envvars`` with your favorite text editor:
 
 .. code-block:: bash
 
